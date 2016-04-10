@@ -4,8 +4,6 @@ is_even(X) :-
 fact(0, Factorial) :-
 	Factorial is 1.
 
-%Does this need to do negative?
-
 fact(X, Factorial) :-
 	X > 0,
 	XTemp is X - 1,
@@ -28,7 +26,33 @@ is_prime(X) :-
 	divisible(X, 2).
 
 
+segregate([], Even, Odd) :-
+	nl,
+	write(Even),
+	%Even is Even,
+	nl,
+	write(Odd).
+	%Odd is Odd.
+
+
+segregate([H | T], Even, Odd) :-
+	%write(H), nl,
+
+	( is_even(H) -> 
+	write("I'm even! "),
+	write(H), nl,
+	append(Even, [H], EvenOne)
+	;
+	write("I'm odd!  "),
+	write(H), nl,
+	append(Odd, [H], OddOne)),
+
+
+	%append(Even, [H], EvenOne),
+	%append(Odd, [H], OddOne),
+	%write(EvenOne),
+	%write(OddOne),
+	segregate(T, EvenOne, OddOne).
 
 
 
-segregate(list, Even, Odd) :-

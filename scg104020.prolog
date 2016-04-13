@@ -30,33 +30,26 @@ fact(X, Factorial) :-
 
 %! --------------------------------------------------------------
 
-%! not working
 %! 3. Prime
 %! This function determines if a variable passed to it is prime or not.
 
-divisible(X, Y) :-
-	(X > Y,
-	0 is X mod Y),
-	write("im in") ;
-	(YTemp is Y + 1,
-	divisible(X, YTemp)).
+divisible(X, Y) :- 0 is X mod Y, !.
 
-%! why doesnt it like the false
-is_prime(1) :-
-	true,!.
+divisible(X, Y) :-
+	X > Y + 1,
+	YTemp is Y + 1,
+	divisible(X, YTemp).
 
 is_prime(2) :-
-	true,!.
+	true, !.
 
 is_prime(X) :- 
-	write("im in").
-	%X > 1,
-	%not(divisible(X, 1)).
-	%divisible(X, 2).
+	not(divisible(X, 2)).
 
 
 %! --------------------------------------------------------------
 
+%! do it the inefficient way
 %! fix the non-is at the end
 %! 4. Segregate
 %! This function seperates a list into two different lists based on even and odd values.
@@ -74,15 +67,17 @@ segregate([H | T], Even, Odd) :-
 	%write(H), nl,
 
 	( is_even(H) -> 
-	write("I'm even! "),
-	write(H), nl,
+	%write("I'm even! "),
+	%write(H), nl,
 	append(Even, [H], EvenOne),
 	segregate(T, EvenOne, Odd)
 	;
-	write("I'm odd!  "),
-	write(H), nl,
+	%write("I'm odd!  "),
+	%write(H), nl,
 	append(Odd, [H], OddOne),
-	segregate(T, Even, OddOne)).
+	segregate(T, Even, OddOne)),
+
+	Even is EvenOne.
 
 
 %! --------------------------------------------------------------
@@ -108,7 +103,31 @@ prod_list([H | T], Product) :-
 %! 6. Bookends
 %! This function takes three lists and determines if the first list is a prefix of the third and the second argument is a suffix of the third.
 
-%! Start here
+ending([], []) :-
+	true, !.
+
+ending([], [H | T]) :-
+	false, !.
+
+ending([H1 | T1], [H2 | T2]) :-
+	H1 is H2,
+	ending(T1, T2), !;
+	ending([H1 | T1], T2), !.
+
+beginning([], []) :-
+	true, !.
+
+beginning([], [H | T]) :-
+	true, !.
+
+beginning([H | T], [H2 | T2]) :-
+	H is H2,
+	beginning(T, T2), !.
+
+
+bookends([H | T], [H1 | T1], [H2 | T2]) :-
+	beginning([H | T], [H2 | T2]),
+	ending([H1 | T1], [H2 | T2]).
 
 
 %! --------------------------------------------------------------

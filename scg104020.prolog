@@ -25,7 +25,7 @@ fact(X, Factorial) :-
 	X > 0,
 	XTemp is X - 1,
 	fact(XTemp, FactorialTemp),
-	Factorial is X * FactorialTemp.
+	Factorial is X * FactorialTemp, !.
 
 
 %! --------------------------------------------------------------
@@ -49,10 +49,9 @@ is_prime(X) :-
 
 %! --------------------------------------------------------------
 
-%! do it the inefficient way
-%! fix the non-is at the end
 %! 4. Segregate
 %! This function seperates a list into two different lists based on even and odd values.
+%! This function finds the lists and prints them out but does not return them.
 
 segregate([], Even, Odd) :-
 	nl,
@@ -71,31 +70,26 @@ segregate([H | T], Even, Odd) :-
 	%write(H), nl,
 	append(Even, [H], EvenOne),
 	segregate(T, EvenOne, Odd)
+	%Even = EvenOne
 	;
 	%write("I'm odd!  "),
 	%write(H), nl,
 	append(Odd, [H], OddOne),
-	segregate(T, Even, OddOne)),
-
-	Even is EvenOne.
+	segregate(T, Even, OddOne)
+	).
 
 
 %! --------------------------------------------------------------
 
-%! fix the non-is at the end
 %! 5. Product List
 %! This function takes a list and produces the multiplicative product of all the numbers within the list.
 
-% why does this get false
-
 prod_list([], Product) :-
-	write(Product),
-	Product is Product.
+	Product is 1.
 
 prod_list([H | T], Product) :-
-	P is H * Product,
-	prod_list(T, P),
-	Product is 1 * P.
+	prod_list(T, ProductTemp),
+	Product is H * ProductTemp.
 
 
 %! --------------------------------------------------------------
@@ -169,7 +163,36 @@ subslice([H | T], [H1 | T1]) :-
 %! 8. Clue
 %! This function simulates a run of the game clue and adds one predicate to complete the game
 
-%! Start here
 
+affairHaving(X, Y) :- havingAffair(X, Y).
+affairHaving(X, Y) :- havingAffair(Y, X), !.
+
+affairHaving(mrBoddy, msGreen).
+affairHaving(mrBoddy, missScarlet).
+
+married(profPlum, msGreen).
+married(msGreen, profPlum).
+
+veryRich(mrBoddy).
+
+greedy(colMustard).
+
+greed(X, Y) :-
+	greedy(X), 
+	not(veryRich(X)),
+	veryRich(Y).
+
+hatred(X, Y) :-
+	havingAffair(X, Z),
+	married(Z, Y).
+
+murder(X, Y) :-
+	hatred(X, Y);
+	greed(X, Y).
+
+
+%! Not sure why this is only getting false and not getting the suspects
+suspect(Killer, mrBoddy) :-
+	murder(Killer, myBoddy).
 
 %! --------------------------------------------------------------
